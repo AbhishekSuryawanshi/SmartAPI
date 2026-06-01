@@ -1,0 +1,8 @@
+{
+  "id": 7,
+  "title": "Mechanical Keyboard",
+  "price_cents": 12999,
+  "in_stock": true,
+  "image_url": "https://example.com/keyboard.jpg",
+  "released_at": "2024-03-01T00:00:00Z"
+}

@@ -1,0 +1,41 @@
+{
+  "openapi": "3.0.0",
+  "info": { "title": "Petstore Mini", "version": "1.0.0" },
+  "paths": {},
+  "components": {
+    "schemas": {
+      "Pet": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["available", "pending", "sold"]
+          },
+          "born_at": { "type": "string", "format": "date-time" },
+          "avatar_url": { "type": "string", "format": "uri" },
+          "owner": { "$ref": "#/components/schemas/Owner" },
+          "tags": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Tag" }
+          }
+        }
+      },
+      "Owner": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string", "format": "email" }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" }
+        }
+      }
+    }
+  }
+}
