@@ -15,3 +15,6 @@ xcuserdata/
 # the consumer app, not in this package. The petstore Generated/ tree is
 # a demo artifact that gets regenerated on every CI run, so don't track it.
 Examples/OpenAPI/Generated/
+
+# Internal launch plan — never commit
+LAUNCH.md
