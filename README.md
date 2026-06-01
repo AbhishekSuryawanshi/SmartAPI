@@ -53,7 +53,7 @@ Add to `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/yourname/SmartAPI.git", from: "1.0.0")
+    .package(url: "https://github.com/AbhishekSuryawanshi/SmartAPI.git", from: "0.1.0")
 ]
 ```
 
