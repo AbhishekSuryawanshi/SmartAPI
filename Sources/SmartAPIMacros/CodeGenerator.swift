@@ -151,7 +151,7 @@ enum CodeGenerator {
         }
 
         var lines: [String] = []
-        lines.append("public struct Page: Codable, Hashable, Sendable {")
+        lines.append("public nonisolated struct Page: Codable, Hashable, Sendable {")
 
         // Properties.
         for field in fields {
@@ -384,7 +384,12 @@ enum CodeGenerator {
         if needsIdentifiable { conformances.append("Identifiable") }
 
         var lines: [String] = []
-        lines.append("public struct \(typeName): \(conformances.joined(separator: ", ")) {")
+        // `nonisolated` so the synthesized Codable/Sendable conformances stay
+        // off the main actor even when the consumer compiles under Swift 6.2's
+        // "main actor by default" mode (the new Xcode app-target default).
+        // Without it, `PaginatedLoader<Page: Sendable>` and other generic
+        // constraints reject the type's actor-isolated conformance.
+        lines.append("public nonisolated struct \(typeName): \(conformances.joined(separator: ", ")) {")
 
         // Schema fingerprint — only emitted on the root model. Used at
         // runtime by `Loader.detectSchemaDrift()` to compare expected vs.
