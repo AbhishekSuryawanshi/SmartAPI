@@ -10,10 +10,11 @@
 **Turn JSON or OpenAPI into a production-ready Swift API client.**
 Typed models, auth, retry, caching, observability, and pagination — built in.
 
-<!-- Drop a screen recording of Examples/Demo/GitHubDemo.swift here.
-     Save the GIF as docs/demo.gif and the image tag below will render it.
-     Recommended: 30 sec max, 800px wide, 24 fps. -->
+<!-- Demo GIF: record Examples/Demo/ProductsDemo.swift, save it as
+     docs/demo.gif, then UNCOMMENT the line below to show it here.
+     Recommended: 30 sec max, 800px wide, 24 fps.
 ![SmartAPI demo](docs/demo.gif)
+-->
 
 ```swift
 @SmartAPI(sample: """
@@ -78,7 +79,13 @@ Then in your target:
 )
 ```
 
-Requires Swift 6.0+, iOS 17+, macOS 14+.
+Requires **Swift 6.0+ · Xcode 16+ · iOS 17+ · macOS 14+**. Fully supports
+Swift 6.2's "main actor by default" mode (the modern Xcode app-target default).
+
+> **First build:** Xcode shows a one-time *"SmartAPIMacros — package needs to
+> enable a macro"* prompt. Click **Trust & Enable**. This is Swift's standard
+> security gate for package macros, not specific to SmartAPI. The first build
+> also compiles `swift-syntax` once (~60–90s); subsequent builds are instant.
 
 ---
 
