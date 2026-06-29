@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# Allow only one CI run per ref at a time — newer pushes cancel older runs.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build + Test (macOS, Swift 6)
+    runs-on: macos-15
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode 16
+        run: sudo xcode-select -switch /Applications/Xcode_16.app
+
+      - name: Show toolchain
+        run: |
+          swift --version
+          xcodebuild -version
+
+      # The first build resolves dependencies (swift-syntax) — slow once, fast after.
+      # We cache it so subsequent CI runs aren't punished for it.
+      - name: Cache SwiftPM build artifacts
+        uses: actions/cache@v4
+        with:
+          path: |
+            .build
+            ~/Library/Caches/org.swift.swiftpm
+          key: spm-${{ runner.os }}-${{ hashFiles('Package.swift', 'Package.resolved') }}
+          restore-keys: |
+            spm-${{ runner.os }}-
+
+      - name: Build (with warnings as errors)
+        run: swift build -Xswiftc -warnings-as-errors
+
+      - name: Test (with warnings as errors)
+        run: swift test -Xswiftc -warnings-as-errors
+
+      - name: Build the CLI in release mode
+        run: swift build -c release --product smartapi-bundle

@@ -1,7 +1,19 @@
 # SmartAPI
 
+[![CI](https://github.com/AbhishekSuryawanshi/SmartAPI/actions/workflows/ci.yml/badge.svg)](https://github.com/AbhishekSuryawanshi/SmartAPI/actions/workflows/ci.yml)
+[![Swift 6.0](https://img.shields.io/badge/Swift-6.0-orange.svg?logo=swift)](https://swift.org)
+[![iOS 17+](https://img.shields.io/badge/iOS-17%2B-blue.svg)](https://developer.apple.com/ios)
+[![macOS 14+](https://img.shields.io/badge/macOS-14%2B-blue.svg)](https://developer.apple.com/macos)
+[![SPM](https://img.shields.io/badge/SwiftPM-supported-DE5C43.svg?logo=swift)](https://www.swift.org/documentation/package-manager/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Turn JSON or OpenAPI into a production-ready Swift API client.**
 Typed models, auth, retry, caching, observability, and pagination — built in.
+
+<!-- Drop a screen recording of Examples/Demo/GitHubDemo.swift here.
+     Save the GIF as docs/demo.gif and the image tag below will render it.
+     Recommended: 30 sec max, 800px wide, 24 fps. -->
+![SmartAPI demo](docs/demo.gif)
 
 ```swift
 @SmartAPI(sample: """
@@ -298,6 +310,50 @@ let user = try await client.call(API.getUser, pathParams: ["id": "42"])
 ```
 
 For your loaders, inject a mock `SmartFetching` directly — protocol-based, no URLSession required.
+
+---
+
+## Why not just OpenAPI Generator?
+
+The obvious comparison is [`swift-openapi-generator`](https://github.com/apple/swift-openapi-generator) (Apple's official) or generic [OpenAPI Generator](https://openapi-generator.tech). Honest take on when each tool fits:
+
+| | SmartAPI | swift-openapi-generator |
+|---|---|---|
+| Works without a published OpenAPI spec | ✅ inline JSON sample or `.smartapi.json` file | ❌ requires a full spec |
+| `snake_case` → `camelCase` automatic | ✅ heuristic-driven | ⚠️ relies on `x-swift-name` hints |
+| `URL` / `Date` / `Bool` inferred from sample | ✅ from values + key suffixes | ⚠️ relies on `format` annotations |
+| Auth + token-refresh + 401 retry | ✅ shipped (`AuthorizationProvider`) | ❌ bring your own |
+| Retry policy with idempotency safety | ✅ shipped (`RetryPolicy.standard`) | ❌ bring your own |
+| Offline cache + stale-data banner | ✅ shipped (`SmartCache`, `SmartView`) | ❌ bring your own |
+| Request deduplication on concurrent GETs | ✅ shipped (`RequestCoalescer`) | ❌ bring your own |
+| Pagination strategies (cursor / page / offset) | ✅ shipped + macro-typed | ❌ bring your own |
+| Lenient decoding with observer-visible defaults | ✅ `strict: false` | ❌ bring your own |
+| Observability protocol | ✅ shipped (`SmartAPIObserver`) | ❌ bring your own |
+| Optional SwiftUI views (off by default) | ✅ `scope: .full` opts in | ❌ models only |
+| Full OpenAPI 3.x feature coverage | ⚠️ pragmatic subset (see [Known limitations](#known-limitations)) | ✅ comprehensive |
+| Apple backing / official status | ❌ | ✅ |
+
+**Use SmartAPI when** you want one SPM that gives you the entire iOS networking layer — typed models + a production HTTP runtime — without composing 4–5 separate libraries. Especially valuable for projects that don't have an OpenAPI spec at all (most internal APIs).
+
+**Use swift-openapi-generator when** you need exact OpenAPI 3.x semantics across a polyglot team where Swift is one consumer of a shared contract, *and* you already have a separate solution for auth/retry/caching/observability.
+
+The two tools are not mutually exclusive — SmartAPI's OpenAPI ingestion mode treats `components.schemas` as the source of truth, so an OpenAPI-first team can use SmartAPI for the iOS client surface while keeping the spec as the contract.
+
+---
+
+## Known limitations
+
+Honest about what's not yet shipped — most of these are on the [roadmap](#roadmap), some are deliberate design choices.
+
+- **Pagination + cache don't combine.** Caching a `PaginatedLoader`'s accumulated items requires invalidation decisions (refresh first page only? whole list? per-page entries with TTL?) that need design work before shipping safely. For now, `cache: true` is supported on single-resource `@SmartAPI` types — not on `paginated:` ones. Tracking issue: #2 (planned).
+- **Link-header pagination is not yet supported.** The three shipped strategies (cursor, page-number, offset) cover the vast majority of modern REST APIs. GitHub's legacy `Link: <url>; rel="next"` style is the most common omission. Planned as a fourth strategy.
+- **OpenAPI 3.x subset.** The CLI handles `components.schemas` with `$ref`, format hints, composition (`allOf` / `oneOf` / `anyOf`), enum values, and recursive schemas via depth-limited unrolling. Discriminators, complex polymorphism, security schemes, and `paths` operations are *not* yet ingested — only schemas become models.
+- **`CodeGenerator` is string-based.** The macro emits Swift source as raw strings rather than `SwiftSyntaxBuilder` AST nodes. It works reliably and is heavily tested, but means a typo in generated code surfaces as a compile error in *your* project rather than at macro-expansion time. Migration to `SwiftSyntaxBuilder` is on the roadmap.
+- **`Examples/Demo/` is a copy-paste-into-your-own-project file**, not a self-contained Xcode project. Drop it into any iOS 17+ app, and it runs against the public GitHub API. A standalone runnable Xcode project demo is a near-term wishlist item.
+- **No built-in mocking / record-replay infrastructure** for consumer tests. `SmartFetching` is protocol-based so you can inject a mock, and a `MockURLProtocol` pattern is documented above, but there's no opinionated `SmartAPITesting` module yet.
+- **Lenient mode reports `wrongType` without saying *which* type.** The observer event includes the field name and a `.wrongType` reason; the actual received type isn't surfaced. Worth adding.
+
+If any of these are blockers for your project, file an issue and I'll prioritize accordingly.
 
 ---
 
