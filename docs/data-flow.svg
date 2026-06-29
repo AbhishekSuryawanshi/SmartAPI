@@ -1,0 +1,58 @@
+<svg width="680" height="565" viewBox="0 0 680 565" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+<title>How SmartAPI turns a JSON sample and a URL into a paginated product list</title>
+<desc>At compile time the @SmartAPI macro reads a JSON sample and generates the typed model and paginated loader. At runtime your base URL gets skip and limit appended, fetched, decoded into typed models, published by SmartPaginatedView, and rendered by your own SwiftUI rows, looping on scroll.</desc>
+<defs>
+<marker id="aG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-rev"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#888780" stroke-width="1.5"/></marker>
+<marker id="aP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-rev"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#534AB7" stroke-width="1.5"/></marker>
+</defs>
+<rect x="0" y="0" width="680" height="565" rx="12" fill="#ffffff"/>
+
+<rect x="100" y="13" width="13" height="13" rx="3" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="119" y="23" font-size="12" fill="#5F5E5A">you write</text>
+<rect x="205" y="13" width="13" height="13" rx="3" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="224" y="23" font-size="12" fill="#5F5E5A">SmartAPI generates / runs</text>
+<rect x="420" y="13" width="13" height="13" rx="3" fill="#F1EFE8" stroke="#888780"/>
+<text x="439" y="23" font-size="12" fill="#5F5E5A">network</text>
+
+<text x="100" y="48" font-size="12" fill="#5F5E5A">compile time — the @SmartAPI macro</text>
+<rect x="100" y="54" width="410" height="54" rx="8" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="120" y="82" font-size="14" font-weight="500" fill="#3C3489">@SmartAPI(...) on enum Products {}</text>
+<text x="120" y="99" font-size="12" fill="#534AB7">you write a JSON sample, nothing else</text>
+
+<line x1="305" y1="108" x2="305" y2="140" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<text x="315" y="128" font-size="12" fill="#5F5E5A">expands at compile time</text>
+
+<rect x="100" y="142" width="410" height="54" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="120" y="170" font-size="14" font-weight="500" fill="#085041">Products.Model · Page · loader()</text>
+<text x="120" y="187" font-size="12" fill="#0F6E56">typed model + decoder + paginated loader</text>
+
+<text x="100" y="222" font-size="12" fill="#5F5E5A">runtime — the data flow</text>
+<rect x="100" y="228" width="410" height="54" rx="8" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="120" y="256" font-size="14" font-weight="500" fill="#3C3489">your base URL → Products.loader(url:)</text>
+<text x="120" y="273" font-size="12" fill="#534AB7">https://dummyjson.com/products</text>
+
+<line x1="305" y1="282" x2="305" y2="314" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<text x="315" y="302" font-size="12" fill="#5F5E5A">appends skip &amp; limit</text>
+
+<rect x="100" y="316" width="410" height="54" rx="8" fill="#F1EFE8" stroke="#888780"/>
+<text x="120" y="344" font-size="14" font-weight="500" fill="#444441">GET /products?skip=0&amp;limit=20</text>
+<text x="120" y="361" font-size="12" fill="#5F5E5A">fetch + decode into [Products.Model]</text>
+
+<line x1="305" y1="370" x2="305" y2="402" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<text x="315" y="390" font-size="12" fill="#5F5E5A">produces typed items</text>
+
+<rect x="100" y="404" width="410" height="54" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="120" y="432" font-size="14" font-weight="500" fill="#085041">SmartPaginatedView shows loader.items</text>
+<text x="120" y="449" font-size="12" fill="#0F6E56">infinite scroll + pull-to-refresh, built in</text>
+
+<line x1="305" y1="458" x2="305" y2="490" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<text x="315" y="478" font-size="12" fill="#5F5E5A">one row per item</text>
+
+<rect x="100" y="492" width="410" height="54" rx="8" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="120" y="520" font-size="14" font-weight="500" fill="#3C3489">ProductRow(product) — your SwiftUI</text>
+<text x="120" y="537" font-size="12" fill="#534AB7">reads product.title, .price, .thumbnail</text>
+
+<path d="M510,519 L545,519 L545,343 L516,343" fill="none" stroke="#534AB7" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#aP)"/>
+<text x="551" y="434" font-size="12" fill="#534AB7">scroll →</text>
+<text x="551" y="449" font-size="12" fill="#534AB7">loadMore()</text>
+</svg>

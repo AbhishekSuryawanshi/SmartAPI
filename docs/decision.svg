@@ -1,0 +1,44 @@
+<svg width="680" height="374" viewBox="0 0 680 374" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+<title>Decision flowchart: when to choose SmartAPI versus a proven HTTP client</title>
+<desc>If the app is mission-critical and shipping very soon, use a proven client. If it needs deep low-level control like cert pinning or streaming, use a proven client. Otherwise — a new project, internal tool, or prototype — use SmartAPI to skip the boilerplate.</desc>
+<defs>
+<marker id="aG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-rev"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#888780" stroke-width="1.5"/></marker>
+<marker id="aB" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-rev"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#185FA5" stroke-width="1.5"/></marker>
+</defs>
+<rect x="0" y="0" width="680" height="374" rx="12" fill="#ffffff"/>
+
+<rect x="90" y="10" width="13" height="13" rx="3" fill="#F1EFE8" stroke="#888780"/>
+<text x="108" y="21" font-size="12" fill="#5F5E5A">decision</text>
+<rect x="200" y="10" width="13" height="13" rx="3" fill="#E6F1FB" stroke="#378ADD"/>
+<text x="218" y="21" font-size="12" fill="#5F5E5A">use a proven client</text>
+<rect x="400" y="10" width="13" height="13" rx="3" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="418" y="21" font-size="12" fill="#5F5E5A">use SmartAPI</text>
+
+<rect x="90" y="44" width="280" height="46" rx="8" fill="#F1EFE8" stroke="#888780"/>
+<text x="230" y="72" text-anchor="middle" font-size="14" font-weight="500" fill="#444441">choosing your networking layer</text>
+<line x1="230" y1="90" x2="230" y2="124" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+
+<rect x="90" y="124" width="280" height="52" rx="8" fill="#F1EFE8" stroke="#888780"/>
+<text x="110" y="150" font-size="14" font-weight="500" fill="#444441">mission-critical app,</text>
+<text x="110" y="167" font-size="12" fill="#5F5E5A">shipping very soon?</text>
+<line x1="230" y1="176" x2="230" y2="210" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<text x="238" y="196" font-size="12" fill="#5F5E5A">no</text>
+<line x1="370" y1="150" x2="418" y2="190" stroke="#185FA5" stroke-width="1.5" marker-end="url(#aB)"/>
+<text x="376" y="143" font-size="12" fill="#185FA5">yes</text>
+
+<rect x="90" y="210" width="280" height="52" rx="8" fill="#F1EFE8" stroke="#888780"/>
+<text x="110" y="236" font-size="14" font-weight="500" fill="#444441">need deep low-level control?</text>
+<text x="110" y="253" font-size="12" fill="#5F5E5A">cert pinning, TLS, streaming</text>
+<line x1="230" y1="262" x2="230" y2="296" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<text x="238" y="282" font-size="12" fill="#5F5E5A">no</text>
+<line x1="370" y1="236" x2="418" y2="216" stroke="#185FA5" stroke-width="1.5" marker-end="url(#aB)"/>
+<text x="376" y="248" font-size="12" fill="#185FA5">yes</text>
+
+<rect x="420" y="168" width="220" height="72" rx="8" fill="#E6F1FB" stroke="#378ADD"/>
+<text x="440" y="199" font-size="14" font-weight="500" fill="#0C447C">use a proven client</text>
+<text x="440" y="218" font-size="12" fill="#185FA5">Alamofire · URLSession · Get</text>
+
+<rect x="90" y="296" width="550" height="58" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="110" y="324" font-size="14" font-weight="500" fill="#085041">use SmartAPI</text>
+<text x="110" y="343" font-size="12" fill="#0F6E56">new project · internal tool · prototype · tired of boilerplate</text>
+</svg>

@@ -41,11 +41,19 @@ SmartPaginatedView(loader: Posts.loader(url: postsURL, fetcher: client)) { post 
 
 ---
 
+## Four steps to a working screen
+
+![SmartAPI quickstart — the four things you do and what you get free](docs/quickstart.svg)
+
+---
+
 ## Why SmartAPI
 
 Every iOS app builds the same networking layer: typed models, an HTTP client, auth refresh, retry policies, observability, pagination. Each one slightly different, each one a maintenance burden.
 
 **SmartAPI generates the typed API layer from a JSON sample (or an OpenAPI spec) and gives you a production-grade runtime to call it.** Auto-generated SwiftUI views are *optional* — most teams keep their own design system and use SmartAPI purely for parsing and fetching.
+
+![How SmartAPI works in any project — the five-stage pipeline](docs/pipeline.svg)
 
 ```swift
 // What you write
@@ -90,6 +98,10 @@ Swift 6.2's "main actor by default" mode (the modern Xcode app-target default).
 ---
 
 ## Quick start
+
+Here's the full journey from a JSON sample and a URL to a rendered, paginated screen — compile-time generation on top, runtime data flow below:
+
+![SmartAPI data flow — from JSON sample and URL to a paginated SwiftUI list](docs/data-flow.svg)
 
 ### 1. Generate a model from a real API response
 
@@ -319,6 +331,14 @@ let user = try await client.call(API.getUser, pathParams: ["id": "42"])
 For your loaders, inject a mock `SmartFetching` directly — protocol-based, no URLSession required.
 
 ---
+
+## Why not just a proven HTTP client?
+
+SmartAPI isn't competing with Alamofire or `URLSession` — it sits *above* the transport layer. They give you a great HTTP client; you still hand-write the models, retry, refresh, cache, pagination, and observability on top. SmartAPI generates the models and ships that runtime. So the honest question is *when* to reach for each:
+
+![When to choose SmartAPI versus a proven HTTP client — a decision flowchart](docs/decision.svg)
+
+Two honest gates: if your app is **mission-critical and shipping very soon**, or needs **deep low-level control** (cert pinning, custom TLS, multipart streaming), reach for a battle-tested client — a `v0.1.0` package is the wrong bet there. Otherwise — a new project, internal tool, or prototype — SmartAPI deletes a week of boilerplate you'd write by hand.
 
 ## Why not just OpenAPI Generator?
 

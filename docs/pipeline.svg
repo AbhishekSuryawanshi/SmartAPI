@@ -1,0 +1,58 @@
+<svg width="680" height="636" viewBox="0 0 680 636" role="img" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+<title>How SmartAPI works in any project, from describing your API to a rendered screen</title>
+<desc>A five-stage pipeline: describe your API once via inline JSON, a JSON file, or an OpenAPI spec; the @SmartAPI macro infers types and generates the model, loader, and optional UI; configure one SmartClient and a typed endpoint catalog; every call runs through auth, retry, deduplication, decoding, and observability; render with built-in views or your own SwiftUI.</desc>
+<defs>
+<marker id="aG" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-rev"><path d="M0,0 L10,5 L0,10" fill="none" stroke="#888780" stroke-width="1.5"/></marker>
+</defs>
+<rect x="0" y="0" width="680" height="636" rx="12" fill="#ffffff"/>
+
+<rect x="50" y="13" width="13" height="13" rx="3" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="68" y="23" font-size="12" fill="#5F5E5A">you write / configure</text>
+<rect x="225" y="13" width="13" height="13" rx="3" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="243" y="23" font-size="12" fill="#5F5E5A">SmartAPI generates / runs</text>
+<rect x="430" y="13" width="13" height="13" rx="3" fill="#F1EFE8" stroke="#888780"/>
+<text x="448" y="23" font-size="12" fill="#5F5E5A">your UI</text>
+
+<text x="50" y="46" font-size="12" fill="#5F5E5A">1 · describe your API once</text>
+<rect x="50" y="54" width="180" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="140" y="84" text-anchor="middle" font-size="14" font-weight="500" fill="#3C3489">inline JSON sample</text>
+<rect x="250" y="54" width="180" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="340" y="84" text-anchor="middle" font-size="14" font-weight="500" fill="#3C3489">.json file + CLI</text>
+<rect x="450" y="54" width="180" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="540" y="84" text-anchor="middle" font-size="14" font-weight="500" fill="#3C3489">OpenAPI spec + CLI</text>
+<line x1="140" y1="106" x2="340" y2="124" stroke="#888780" stroke-width="1.5"/>
+<line x1="540" y1="106" x2="340" y2="124" stroke="#888780" stroke-width="1.5"/>
+<line x1="340" y1="106" x2="340" y2="124" stroke="#888780" stroke-width="1.5"/>
+<line x1="340" y1="124" x2="340" y2="140" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+
+<text x="110" y="132" font-size="12" fill="#5F5E5A">2 · @SmartAPI macro</text>
+<rect x="110" y="140" width="460" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="130" y="170" font-size="14" font-weight="500" fill="#085041">infers types from your sample</text>
+<text x="130" y="187" font-size="12" fill="#0F6E56">URL, Date, Bool, nested structs — automatic</text>
+<line x1="340" y1="192" x2="340" y2="224" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<rect x="110" y="224" width="460" height="52" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="130" y="254" font-size="14" font-weight="500" fill="#085041">generates Model · Loader · Page</text>
+<text x="130" y="271" font-size="12" fill="#0F6E56">plus View · EditView · Mutator when scope is .full</text>
+
+<text x="110" y="298" font-size="12" fill="#5F5E5A">3 · configure once per app</text>
+<line x1="340" y1="276" x2="340" y2="306" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<rect x="110" y="306" width="460" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="130" y="336" font-size="14" font-weight="500" fill="#3C3489">SmartClient</text>
+<text x="130" y="353" font-size="12" fill="#534AB7">baseURL · auth · retry · dedup · observer</text>
+<line x1="340" y1="358" x2="340" y2="390" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<rect x="110" y="390" width="460" height="52" rx="8" fill="#EEEDFE" stroke="#7F77DD"/>
+<text x="130" y="420" font-size="14" font-weight="500" fill="#3C3489">SmartEndpoint catalog</text>
+<text x="130" y="437" font-size="12" fill="#534AB7">every endpoint typed, called from anywhere</text>
+
+<text x="110" y="466" font-size="12" fill="#5F5E5A">4 · every call runs through</text>
+<line x1="340" y1="442" x2="340" y2="474" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<rect x="110" y="474" width="460" height="56" rx="8" fill="#E1F5EE" stroke="#1D9E75"/>
+<text x="130" y="504" font-size="14" font-weight="500" fill="#085041">auth → retry → coalesce → decode</text>
+<text x="130" y="521" font-size="12" fill="#0F6E56">one network round-trip → typed Model, observer fires</text>
+
+<text x="110" y="554" font-size="12" fill="#5F5E5A">5 · render</text>
+<line x1="340" y1="530" x2="340" y2="562" stroke="#888780" stroke-width="1.5" marker-end="url(#aG)"/>
+<rect x="110" y="562" width="460" height="52" rx="8" fill="#F1EFE8" stroke="#888780"/>
+<text x="130" y="592" font-size="14" font-weight="500" fill="#444441">SmartView / SmartPaginatedView</text>
+<text x="130" y="609" font-size="12" fill="#5F5E5A">loading &amp; error states handled — or your own views</text>
+</svg>
