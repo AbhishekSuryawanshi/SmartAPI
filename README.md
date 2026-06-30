@@ -422,6 +422,44 @@ The two tools are not mutually exclusive — SmartAPI's OpenAPI ingestion mode t
 
 ---
 
+## FAQ
+
+### "If I have to paste a JSON sample, why not just use Alamofire?"
+
+You need the JSON shape **with any tool** — you can't write a `Codable` model for a response you've never seen. So you always look at the JSON first. The only difference is who turns it into Swift:
+
+- **With Alamofire / URLSession:** you read the JSON, then **hand-write** the struct, the `CodingKeys`, the decoder, the retry, the pagination, the cache — and maintain all of it as the API evolves.
+- **With SmartAPI:** you paste the same JSON once, and the macro **generates** all of that.
+
+Pasting the sample isn't *extra* work — it *replaces* the much larger work of transcribing the JSON into typed Swift by hand. It's the minimum possible way to describe an API's shape: less effort than even one hand-written struct.
+
+### "What if I don't have a JSON sample?"
+
+Then you can't integrate the API with *any* library — that's a precondition for writing a model anywhere, not a SmartAPI limitation. In practice you always have one, or can get it in seconds:
+
+- **`curl` / Postman / the browser** — hit the endpoint once, copy the response. (You'd do this anyway before writing any code.)
+- **The API's docs** — most publish example responses. Copy-paste.
+- **An OpenAPI spec → paste nothing.** If the API has a spec, the CLI generates every model from it: `swift run smartapi-bundle openapi spec.json Generated/`.
+
+### "Isn't a pasted sample fragile when the API changes?"
+
+It's actually *more* resilient than hand-written models, not less:
+
+- **`strict: false`** — missing / null / wrong-type fields fall back to defaults instead of crashing the screen.
+- **Schema-drift detection** — the shape is fingerprinted at compile time; `loader.detectSchemaDrift()` warns you when the live API diverges from your sample. A hand-rolled `Codable` gives you no such warning — it just fails at runtime in front of a user.
+
+So the sample isn't a fragile dependency — it's a **contract** the package can validate against.
+
+### "Do I have to use the generated SwiftUI views?"
+
+No. `scope: .parseOnly` (the recommended default) generates only the model + loader — you bind them to your own design system. Generated views are opt-in via `scope: .full`.
+
+### "Does it support POST / GraphQL / authenticated endpoints?"
+
+Yes — `SmartQuery.post(url, body:)` for typed bodies (including GraphQL), `AuthorizationProvider` for auth + refresh, and a `SmartEndpoint` catalog for mixed GET/POST/PUT/DELETE. See [Production features](#production-features).
+
+---
+
 ## Known limitations
 
 Honest about what's not yet shipped — most of these are on the [roadmap](#roadmap), some are deliberate design choices.
