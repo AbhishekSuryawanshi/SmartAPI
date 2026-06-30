@@ -334,9 +334,63 @@ For your loaders, inject a mock `SmartFetching` directly — protocol-based, no 
 
 ## Why not just a proven HTTP client?
 
-SmartAPI isn't competing with Alamofire or `URLSession` — it sits *above* the transport layer. They give you a great HTTP client; you still hand-write the models, retry, refresh, cache, pagination, and observability on top. SmartAPI generates the models and ships that runtime. So the honest question is *when* to reach for each:
+SmartAPI isn't competing with Alamofire or `URLSession` — it sits *above* the transport layer (and uses `URLSession` under the hood). They give you a great HTTP client; you still hand-write the models, retry, refresh, cache, pagination, and observability on top. SmartAPI generates the models and ships that runtime.
+
+So the real comparison isn't *SmartAPI vs Alamofire*. It's **SmartAPI vs (an HTTP client + everything you build on top of it):**
+
+![SmartAPI versus a hand-rolled stack on top of an HTTP client](docs/vs-http-client.svg)
+
+### The same task, both ways
+
+**Goal:** a typed, paginated list of users, with retry on 5xx and an offline cache.
+
+```swift
+// Hand-rolled on top of an HTTP client — you write and maintain all of this:
+struct User: Codable, Identifiable {
+    let id: Int; let name: String; let avatarURL: URL
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case avatarURL = "avatar_url"        // map every snake_case key by hand
+    }
+}
+struct UserPage: Codable { let users: [User]; let total: Int }
+
+final class Retry: RequestInterceptor { /* exponential backoff, retry-count guard… */ }
+
+@MainActor final class UsersVM: ObservableObject {
+    @Published var users: [User] = []
+    private var page = 1; private var total = 0
+    func loadMore() async {
+        guard users.count < total || total == 0 else { return }
+        let r = try? await AF.request(usersURL, parameters: ["page": page, "per_page": 20],
+                                      interceptor: Retry()).serializingDecodable(UserPage.self).value
+        guard let r else { return }
+        users += r.users; total = r.total; page += 1
+    }
+    // …plus the cache layer, the auth refresh, the observability — still TODO
+}
+```
+
+```swift
+// With SmartAPI — the same outcome:
+@SmartAPI(
+    sample: #"{ "users": [{"id":1,"name":"Ada","avatar_url":"https://…"}], "total": 194 }"#,
+    cache: true,
+    paginated: .page(items: "users", total: "total")
+)
+enum Users {}
+
+let loader = Users.loader(url: usersURL, fetcher: client)
+// .items · .loadMore() · .hasMore · retry · cache · observability — all built in
+```
+
+### When to reach for each
+
+This is the honest part — and the two gates that should send you *away* from SmartAPI:
 
 ![When to choose SmartAPI versus a proven HTTP client — a decision flowchart](docs/decision.svg)
+
+If your app is **mission-critical and shipping very soon**, or needs **deep low-level control** (cert pinning, custom TLS, multipart streaming, request interceptors), reach for a battle-tested client — Alamofire's decade of hardening wins, and a `v0.1.0` is the wrong bet. Otherwise — a new project, internal tool, or prototype — SmartAPI deletes the week of boilerplate above the HTTP layer.
 
 Two honest gates: if your app is **mission-critical and shipping very soon**, or needs **deep low-level control** (cert pinning, custom TLS, multipart streaming), reach for a battle-tested client — a `v0.1.0` package is the wrong bet there. Otherwise — a new project, internal tool, or prototype — SmartAPI deletes a week of boilerplate you'd write by hand.
 
